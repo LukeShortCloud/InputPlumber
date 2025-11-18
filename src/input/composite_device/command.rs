@@ -45,6 +45,8 @@ pub enum CompositeCommand {
     SetTargetDevices(Vec<TargetDeviceTypeId>),
     GetForceFeedbackEnabled(mpsc::Sender<bool>),
     SetForceFeedbackEnabled(bool),
+    GetForceFeedbackScale(mpsc::Sender<f64>),
+    SetForceFeedbackScale(f64),
     SourceDeviceAdded(DeviceInfo),
     SourceDeviceRemoved(DeviceInfo),
     SourceDeviceStopped(DeviceInfo),

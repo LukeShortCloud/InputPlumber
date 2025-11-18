@@ -140,6 +140,8 @@ pub struct CompositeDevice {
     /// Whether or not force feedback output events should be routed to
     /// supported source devices.
     ff_enabled: bool,
+    /// Set the scale for the force feedback intensity.
+    ff_scale: f64,
     /// Set of available Force Feedback effect IDs that are not in use
     /// TODO: Just use the keys from ff_effect_id_source_map to determine next id
     ff_effect_ids: BTreeSet<i16>,
@@ -509,6 +511,15 @@ impl CompositeDevice {
                     CompositeCommand::SetForceFeedbackEnabled(enabled) => {
                         log::info!("Setting force feedback enabled: {enabled:?}");
                         self.ff_enabled = enabled;
+                    }
+                    CompositeCommand::GetForceFeedbackScale(sender) => {
+                        if let Err(e) = sender.send(self.ff_scale).await {
+                            log::error!("Failed to send force feedback scale status: {e}");
+                        }
+                    }
+                    CompositeCommand::SetForceFeedbackScale(scale) => {
+                        log::info!("Setting force feedback scale: {scale:?}");
+                        self.ff_scale = scale;
                     }
                     CompositeCommand::Stop => {
                         log::debug!(

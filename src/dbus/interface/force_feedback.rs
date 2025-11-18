@@ -102,6 +102,21 @@ where
         Ok(())
     }
 
+    /// Set the scale for force feedback intensity
+    #[zbus(property)]
+    async fn scale(&self) -> fdo::Result<f64> {
+        Ok(0.0)
+    }
+    #[zbus(property)]
+    async fn set_scale(
+        &mut self,
+        _scale: f64,
+        #[zbus(header)] hdr: Option<Header<'_>>,
+    ) -> fdo::Result<()> {
+        check_polkit(hdr, "org.shadowblip.Output.ForceFeedback.Scale").await?;
+        Ok(())
+    }
+
     /// Send a simple rumble event
     async fn rumble(&mut self, value: f64, #[zbus(header)] hdr: Header<'_>) -> fdo::Result<()> {
         check_polkit(Some(hdr), "org.shadowblip.Output.ForceFeedback.Rumble").await?;
